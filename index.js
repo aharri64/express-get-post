@@ -23,10 +23,27 @@ app.get('/dinosaurs', (req, res) => {
     let dinos = fs.readFileSync('./dinosaurs.json')
     // this will take our data and put it into a more readable format ⬇️
     dinos = JSON.parse(dinos)
-    console.log(dinos)
+    console.log(req.query.nameFilter)
+    let nameToFilterBy = req.query.nameFilter
+    //array method filter
+
+    // if there is no submit of the form
+    // this will be undefined, and we will return all dinos
+    if (nameToFilterBy) {
+        const newFilteredArray = dinos.filter((dinosaurObj) => {
+            if (dinosaurObj.name === nameToFilterBy) {
+                return true
+            }
+        })
+        dinos = newFilteredArray
+    }
+    // console.log(newFilteredArray)
+    // console.log(dinos)
     // in our views folder render this page
     res.render('dinosaurs/index', { dinos: dinos })
 })
+
+
 
 // NEW VIEW
 // most specific tp least specific url path
