@@ -50,8 +50,25 @@ app.get('/dinosaurs/:index', (req, res) => {
 // POST route, doesn't have a view
 
 app.post('/dinosaurs', (req, res) => {
+    let dinos = fs.readFileSync('./dinosaurs.json')
+    // this will take our data and put it into a more readable format ⬇️
+    dinos = JSON.parse(dinos)
+    //contruct a new dino with our req.body values
+    const newDino = {
+        name: req.body.name,
+        type: req.body.type
+    }
+
+    //updates our dinos with a new dino
+    dinos.push(newDino)
+    // going to overwrite and turn back into a string
+    fs.writeFileSync('./dinosaurs.json', JSON.stringify(dinos))
+
+    //like doing a get request to .dinosaurs
+    res.redirect('/dinosaurs')
     // this is coming from our form submit
     //we are going to look at the req.body
+    // console.log(req.body)
 })
 const PORT = process.env.PORT || 8000
 app.listen(PORT, () => { console.log(`server is running on port ${PORT}🎧`) })
