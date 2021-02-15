@@ -1,11 +1,12 @@
 //---------- REQUIRES
-const express = require('express')
-const app = express()
-const expressLayouts = require('express-ejs-layouts')
-const fs = require('fs')
+
+const express = require('express'); //* 1
+const app = express();//* 1
+const expressLayouts = require('express-ejs-layouts');//* 1
+const fs = require('fs');//* 1
 
 //---------- MIDDLEWARE
-app.use(expressLayouts)
+app.use(expressLayouts)//* 1
 //this will help us use our layout file ⬆️
 app.use(express.urlencoded({ extended: false }))
 
@@ -87,5 +88,6 @@ app.post('/dinosaurs', (req, res) => {
     //we are going to look at the req.body
     // console.log(req.body)
 })
-const PORT = process.env.PORT || 8000
-app.listen(PORT, () => { console.log(`server is running on port ${PORT}🎧`) })
+
+const PORT = process.env.PORT || 8000; //* 1
+app.listen(PORT, () => { console.log(`server is running on port ${PORT}🎧`) }); //* 1
