@@ -8,26 +8,23 @@ const fs = require('fs');//* 1
 //---------- MIDDLEWARE
 app.use(expressLayouts)//* 1
 //this will help us use our layout file ⬆️
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: false })) //* 4 this is body parser
 
-app.set('view engine', 'ejs')
+app.set('view engine', 'ejs') //* 2
 
 
 //---------- ROUTES
-app.get('/', (req, res) => {
+app.get('/', (req, res) => { //* 1
     res.send('hi there')
 })
 
 //Index View
-app.get('/dinosaurs', (req, res) => {
-    // in our views folder render this page
-    let dinos = fs.readFileSync('./dinosaurs.json')
-    // this will take our data and put it into a more readable format ⬇️
-    dinos = JSON.parse(dinos)
-    console.log(req.query.nameFilter)
+app.get('/dinosaurs', (req, res) => { //* 1
+    let dinos = fs.readFileSync('./dinosaurs.json') //! 1. readFileSync will take the infot in dinosaurs.json and then print it on to the page
+    dinos = JSON.parse(dinos) //! 1. this will take our data and put it into a more readable format
+    ////console.log(req.query.nameFilter)
     let nameToFilterBy = req.query.nameFilter
     //array method filter
-
     // if there is no submit of the form
     // this will be undefined, and we will return all dinos
     if (nameToFilterBy) {
@@ -38,41 +35,35 @@ app.get('/dinosaurs', (req, res) => {
         })
         dinos = newFilteredArray
     }
-    // console.log(newFilteredArray)
-    // console.log(dinos)
-    // in our views folder render this page
-    res.render('dinosaurs/index', { dinos: dinos })
-})
+    // //console.log(newFilteredArray)
+    // //console.log(dinos) 1.
+    res.render('dinosaurs/index', { dinos: dinos }) // ! 1. in our views folder render this page with {this} data to pass to it
+});
 
 
 
-// NEW VIEW
-// most specific tp least specific url path
+// NEW VIEW //* 4. part of the post route
+//? This route must be above the show view!! most specific to least specific url path
 app.get('/dinosaurs/new', (req, res) => {
     res.render('dinosaurs/new')
-})
+}); //! this is just where a user can input a new dino to the app
 
-//SHOW VIEW
-app.get('/dinosaurs/:index', (req, res) => {
-    let dinos = fs.readFileSync('./dinosaurs.json')
-    // this will take our data and put it into a more readable format ⬇️
-    dinos = JSON.parse(dinos)
-    //get the dino that's asked for
-    // req.params.index
+//SHOW VIEW //* 3
+app.get('/dinosaurs/:index', (req, res) => {     //! :index will get the dino that's asked for
+    let dinos = fs.readFileSync('./dinosaurs.json') //! readFileSync will take the infot in dinosaurs.json and then print it on to the page
+    dinos = JSON.parse(dinos) //! this will take our data and put it into a more readable format 
     const dino = dinos[req.params.index]
-    res.render('dinosaurs/show', { dino })
+    res.render('dinosaurs/show', { dino }) //? {dino} is the same as saying {dinos: dinos}
 })
 
 
 
-// POST route, doesn't have a view
+// POST route, doesn't have a view //* 4. part 2 of the post route
 
 app.post('/dinosaurs', (req, res) => {
     let dinos = fs.readFileSync('./dinosaurs.json')
-    // this will take our data and put it into a more readable format ⬇️
     dinos = JSON.parse(dinos)
-    //contruct a new dino with our req.body values
-    const newDino = {
+    const newDino = {     //! when we deal with forms we want to look at !!!__req.body__!!!
         name: req.body.name,
         type: req.body.type
     }

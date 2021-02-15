@@ -5,13 +5,9 @@
     <input type="submit">
 </form>
 
-<ul>
+<ul> <!--<%# #2 %>-->
     <% for (let dino of dinos) {%>
-        <p>
-            <%= dino.name %>
-        </p>
-        <p>
-            <%= dino.type %>
-        </p>
-        <% } %>
+        <p><%= dino.name %></p>
+        <p><%= dino.type %></p>
+    <% } %>
 </ul>
