@@ -22,14 +22,15 @@ app.get('/', (req, res) => { //* 1
 app.get('/dinosaurs', (req, res) => { //* 1
     let dinos = fs.readFileSync('./dinosaurs.json') //! 1. readFileSync will take the infot in dinosaurs.json and then print it on to the page
     dinos = JSON.parse(dinos) //! 1. this will take our data and put it into a more readable format
+
     ////console.log(req.query.nameFilter)
-    let nameToFilterBy = req.query.nameFilter
-    //array method filter
-    // if there is no submit of the form
-    // this will be undefined, and we will return all dinos
+    let nameToFilterBy = req.query.nameFilter           //*array method filter
     if (nameToFilterBy) {
-        const newFilteredArray = dinos.filter((dinosaurObj) => {
+        const newFilteredArray = dinos.filter((dinosaurObj) => {       //! this will iterate through the array and check if the name: of the dino is the same as dinos.filter(dinosaurObj)
+                    //? we could also put return (dinosaurObj.name === nameToFilterBy)
             if (dinosaurObj.name === nameToFilterBy) {
+                    //? can also (dinosaurObj.name.toLowerCase() === nameToFilterBy.toLowerCase())
+                    //! This will turn both values to lower case so that they can match, in case out user wants to use upper case or capitals
                 return true
             }
         })
@@ -60,24 +61,19 @@ app.get('/dinosaurs/:index', (req, res) => {     //! :index will get the dino th
 
 // POST route, doesn't have a view //* 4. part 2 of the post route
 
-app.post('/dinosaurs', (req, res) => {
+app.post('/dinosaurs', (req, res) => {           //! this is coming from our form submit in new.ejs
     let dinos = fs.readFileSync('./dinosaurs.json')
     dinos = JSON.parse(dinos)
-    const newDino = {     //! when we deal with forms we want to look at !!!__req.body__!!!
+    const newDino = {                   //! when we deal with forms we want to look at !!!__req.body__!!!
         name: req.body.name,
         type: req.body.type
     }
-
-    //updates our dinos with a new dino
-    dinos.push(newDino)
-    // going to overwrite and turn back into a string
+    dinos.push(newDino)                      //*updates our dinos with a new dino
+    // JSON.stringify = going to overwrite and turn back into a string
     fs.writeFileSync('./dinosaurs.json', JSON.stringify(dinos))
-
-    //like doing a get request to .dinosaurs
-    res.redirect('/dinosaurs')
-    // this is coming from our form submit
-    //we are going to look at the req.body
-    // console.log(req.body)
+    //* 2 arguments      ⬆️ The path   &   ⬆️ the value that we want to write
+    res.redirect('/dinosaurs')                            //* then we get redirected to ➡ ./dinosaurs
+    // //console.log(req.body)
 })
 
 const PORT = process.env.PORT || 8000; //* 1

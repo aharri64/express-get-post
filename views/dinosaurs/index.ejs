@@ -1,4 +1,5 @@
 <h2>Here's all my dinosaurs</h2>
+<!-- This is create a filtering form, this comes from the first /dinosaurs get route with the if statememt-->
 <form method="GET" action="/dinosaurs">
     <label for="nameFilter">Filter by Name</label>
     <input id="nameFilter" type="text" name="nameFilter">
@@ -11,3 +12,11 @@
         <p><%= dino.type %></p>
     <% } %>
 </ul>
+
+<form action="/dinosaurs/new" method="get">
+    <button type="submit">Add New Dino</button>
+</form>
+
+<form action="/dinosaurs" method="get">
+    <button type="submit">Back to All Dinos</button>
+</form>
