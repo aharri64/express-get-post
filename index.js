@@ -1,20 +1,23 @@
 //---------- REQUIRES
 
-const express = require('express'); //* 1
-const app = express();//* 1
-const expressLayouts = require('express-ejs-layouts');//* 1
-const fs = require('fs');//* 1
+const express = require('express'); //* 1.1
+const app = express();//* 1.1
+const expressLayouts = require('express-ejs-layouts');//* 1.1
+const fs = require('fs');//* 1.1
+const methodOverride = require('method-override'); //* 2.1
 
 //---------- MIDDLEWARE
-app.use(expressLayouts)//* 1
+app.use(expressLayouts)//* 1.1
 //this will help us use our layout file ⬆️
 app.use(express.urlencoded({ extended: false })) //* 4 this is body parser
+app.use(methodOverride('_method')); //* 2.1
 
-app.set('view engine', 'ejs') //* 2
+
+app.set('view engine', 'ejs') //* 1.2
 
 
 //---------- ROUTES
-app.get('/', (req, res) => { //* 1
+app.get('/', (req, res) => { //* 1.1
     res.send('hi there')
 })
 
@@ -75,6 +78,24 @@ app.post('/dinosaurs', (req, res) => {           //! this is coming from our for
     res.redirect('/dinosaurs')                            //* then we get redirected to ➡ ./dinosaurs
     // //console.log(req.body)
 })
+
+
+// PUT & DELETE 2.0
+
+app.delete('/dinosaurs/:idx', (req, res) => {
+    let dinosaurs = fs.readFileSync('/dinosaurs.json');
+    dinosaurs = JSON.parse(dinosaurs);
+    //intermediate variable
+    let idx = Number(req.params.idx) //? what is this datatype? comes in as a string then changes into an integer
+
+    //* remove the dinosaur
+    dinosaurs.splice(idx, 1);
+    //?                      ⬆️ this means we ware going to remove one
+    fs.writeFileSync('./dinosaurs.json', JSON.stringify(dinosaurs));
+     //* 2 arguments      ⬆️ The path   &   ⬆️ the value that we want to write
+     res.redirect('/dinosaurs')  
+});
+
 
 const PORT = process.env.PORT || 8000; //* 1
 app.listen(PORT, () => { console.log(`server is running on port ${PORT}🎧`) }); //* 1

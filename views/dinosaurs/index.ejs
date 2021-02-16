@@ -6,11 +6,16 @@
     <input type="submit">
 </form>
 
-<ul> <!--<%# #2 %>-->
-    <% for (let dino of dinos) {%>
+<ul>
+    <% for (let idx = 0; idx < dinos.length; idx++) { %>
+        <% let dino = dinos[idx] %>
         <p><%= dino.name %></p>
         <p><%= dino.type %></p>
+        <form method="POST" action="/dinosaurs/<%= idx %>?_method=DELETE" >
+            <button type="submit">DELETE</button>
+        </form>
     <% } %>
+
 </ul>
 
 <form action="/dinosaurs/new" method="get">
