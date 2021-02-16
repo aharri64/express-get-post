@@ -14,6 +14,9 @@
         <form method="POST" action="/dinosaurs/<%= idx %>?_method=DELETE" >
             <button type="submit">DELETE</button>
         </form>
+        <form method="POST" action="/dinosaurs/edit/<%= idx %>" >
+            <button type="submit">Edit</button>
+        </form>
     <% } %>
 
 </ul>
